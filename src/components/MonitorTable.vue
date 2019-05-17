@@ -5,6 +5,7 @@
         <th>#</th>
         <th title="Ready to be merged. All checkers succeeded and has enough approvers">Ready</th>
         <th>Owner</th>
+        <th>QA<br>SW</th>
         <th>Title</th>
         <th>Approvers</th>
         <th>Checkers</th>
@@ -18,7 +19,7 @@
         </th>
       </thead>
       <tbody>
-        <PRRow v-for="(prData, index) in prList" :prData="prData" :index="index" :key="index"/>
+        <PRRow v-for="(prData, index) in filteredPrList" :prData="prData" :index="index" :key="index" :hideQA="hideQA" :hideSW="hideSW"/>
       </tbody>
     </table>
   </div>
@@ -28,13 +29,14 @@
 import { mapState } from "vuex";
 import PRRow from "./PRRow";
 import {
-  getNameFromLogin,
+  getUserWithLogin,
   didPRGetRequiredApproveCount
 } from "../helpers/theHelper";
 import { setInterval } from "timers";
 
 export default {
   name: "MonitorTable",
+  props: ["hideQA", "hideSW"],
   data() {
     return {
       windowTitle: "pr-monitor",
@@ -42,9 +44,12 @@ export default {
   },
   updated() {
     this.windowTitle =
+    '(' + this.filteredPrList.length + ")" +
       (this.isThereAnyReadyPR ? "Ⓜ️" : "") +
       (this.isMyReviewNeeded ? "❗️ " : "") +
       "pr-monitor";
+
+    // document.title = '(' + this.filteredPrList.length + ") pr monitor";
   },
   mounted() {
     setInterval(() => {
@@ -57,12 +62,17 @@ export default {
   },
   computed: {
     ...mapState(["reviewersByPrID", "prList", "config"]),
-    getPrList() {
+    filteredPrList() {
+      return this.prList.filter(prData => {
+        let currentUser = getUserWithLogin(prData.user.login);
+        return !(currentUser.role === "SW" && this.hideSW) && !(currentUser.role === "QA" && this.hideQA);
+      })
+
       return [];
     },
     isMyReviewNeeded() {
       let result = false;
-      this.prList.forEach(prData => {
+      this.filteredPrList.forEach(prData => {
         if (!this.didIApprove(prData)) {
           result = true;
         }
@@ -72,7 +82,7 @@ export default {
     },
     isThereAnyReadyPR() {
       let result = false;
-      this.prList.forEach(prData => {
+      this.filteredPrList.forEach(prData => {
         if (
           this.hasAllCheckersPassed(prData) &&
           this.didPRGetRequiredApproves(prData)
@@ -129,9 +139,9 @@ export default {
         ) {
           tempList.push({
             login: this.reviewersByPrID[prNumber][currentReviewer].user.login,
-            name: getNameFromLogin(
+            name: getUserWithLogin(
               this.reviewersByPrID[prNumber][currentReviewer].user.login
-            )
+            ).name
           });
         }
       }

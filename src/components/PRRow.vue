@@ -9,8 +9,9 @@
         target="_blank"
       >{{ prData.number }}</a>
     </td>
+    <td>{{ owner.role }}</td>
     <td :class="{'blink_me': isReadyToBeMerged}">{{ isReadyToBeMerged ? '✅' : '❌'}}</td>
-    <td :title="prData.user.login">{{ ownerName }}</td>
+    <td :title="prData.user.login">{{ owner.name }}</td>
     <td>
       <a
         :href="`https://github.com/${config.githubConfig.owner}/${config.githubConfig.repo}/pull/${prData.number}`"
@@ -57,7 +58,7 @@
 <script>
 import { mapState } from "vuex";
 import {
-  getNameFromLogin,
+  getUserWithLogin,
   didPRGetRequiredApproveCount
 } from "../helpers/theHelper";
 
@@ -98,9 +99,9 @@ export default {
         ) {
           tempList.push({
             login: this.reviewersByPrID[prNumber][currentReviewer].user.login,
-            name: getNameFromLogin(
+            name: getUserWithLogin(
               this.reviewersByPrID[prNumber][currentReviewer].user.login
-            )
+            ).name
           });
         }
       }
@@ -116,8 +117,8 @@ export default {
     didPRGetRequiredApproves() {
       return didPRGetRequiredApproveCount(this.approverList);
     },
-    ownerName() {
-      return getNameFromLogin(this.prData.user.login);
+    owner() {
+      return getUserWithLogin(this.prData.user.login);
     }
   },
   methods: {

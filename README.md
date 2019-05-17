@@ -1,4 +1,4 @@
-# nu-pr-monitor
+# pr-monitor
 
 ## Project setup
 ```
