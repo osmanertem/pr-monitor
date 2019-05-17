@@ -66,9 +66,7 @@ export default {
       return this.prList.filter(prData => {
         let currentUser = getUserWithLogin(prData.user.login);
         return !(currentUser.role === "SW" && this.hideSW) && !(currentUser.role === "QA" && this.hideQA);
-      })
-
-      return [];
+      });
     },
     isMyReviewNeeded() {
       let result = false;
