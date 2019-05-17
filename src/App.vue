@@ -25,9 +25,8 @@
 
 <script>
 import MonitorTable from "./components/MonitorTable.vue";
-import { setInterval, clearInterval } from "timers";
+import { setInterval } from "timers";
 import { mapState } from "vuex";
-import { watch } from 'fs';
 
 export default {
   name: "app",
@@ -83,7 +82,7 @@ export default {
   },
   watch: {
     hideQA() {
-      console.log(this.hideQA);
+      console.log(this.hideQA); // eslint-disable-line
       localStorage["hideQA"] = this.hideQA;
     },
     hideSW() {
