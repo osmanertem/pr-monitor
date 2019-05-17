@@ -3,9 +3,9 @@
     <table class="the-table" border="1">
       <thead>
         <th>#</th>
-        <th>Owner</th>
-        <th title="Ready to be merged. All checkers succeeded and has enough approvers">Ready</th>
         <th>QA<br>SW</th>
+        <th title="Ready to be merged. All checkers succeeded and has enough approvers">Ready</th>
+        <th>Owner</th>
         <th>Title</th>
         <th>Approvers</th>
         <th>Checkers</th>
