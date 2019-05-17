@@ -7,15 +7,19 @@
       <span>/</span>
       <input type="text" :value="config.githubConfig.repo" @change="onGithubRepoChange">
     </p>
+    <MonitorTable id="monitor-table" :hideQA="hideQA" :hideSW="hideSW" />
     <p>
-      <span>username: </span>
+      <span>Hide QA: </span>
+      <input type="checkbox" v-model="hideQA">
+      <span>Hide SW: </span>
+      <input type="checkbox" v-model="hideSW">
+      <span style="margin-left:30px">username: </span>
       <input type="text" :value="config.githubConfig.username" @change="onGithubUsernameChange">
       <span>page reload in ms:</span>
       <input type="text" :value="config.pageReloadInMs" @change="onPageReloadChanged" style="width:50px"> 
       <span>access_token: </span>
       <input type="text" :value="config.githubConfig.apiAccessToken" @change="onAccessTokenChanged" style="width:300px">
     </p>
-    <MonitorTable id="monitor-table"/>
   </div>
 </template>
 
@@ -23,23 +27,22 @@
 import MonitorTable from "./components/MonitorTable.vue";
 import { setInterval, clearInterval } from "timers";
 import { mapState } from "vuex";
+import { watch } from 'fs';
 
 export default {
   name: "app",
   data() {
     return {
       titleInterval: undefined,
+      hideQA: localStorage["hideQA"] === "true",
+      hideSW: localStorage["hideSW"] === "true",
     };
   },
   components: {
     MonitorTable
   },
   mounted() {
-    if (this.titleInterval) {
-      clearInterval(this.titleInterval);
-    }
-
-    this.titleInterval = setInterval(() => {
+    setInterval(() => {
       this.$store.dispatch("fetchPRList");
     }, parseInt(this.config.pageReloadInMs));
   },
@@ -77,6 +80,15 @@ export default {
       localStorage["config"] = JSON.stringify(copyConfig);
       location.reload();
     }
+  },
+  watch: {
+    hideQA() {
+      console.log(this.hideQA);
+      localStorage["hideQA"] = this.hideQA;
+    },
+    hideSW() {
+      localStorage["hideSW"] = this.hideSW;
+    },
   }
 };
 </script>
