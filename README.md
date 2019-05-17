@@ -1,5 +1,7 @@
 # pr-monitor
 
+![Pr Monitor](docs/pr-monitor-ss.jpg "Pr Monitor")
+
 ## Project setup
 ```
 npm install
