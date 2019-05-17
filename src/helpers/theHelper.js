@@ -28,7 +28,7 @@ const USERS = [
   { login: "zhunor", name: "Orhun", role: "SW" }
 ];
 
-const MIN_REQUIRED_APPROVER_COUNT = 3;
+const MIN_REQUIRED_APPROVER_COUNT = 2;
 
 export function getUserWithLogin(login) {
   for (let i = 0; i < USERS.length; i++) {
