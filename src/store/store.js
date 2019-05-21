@@ -69,11 +69,11 @@ export default new Vuex.Store({
         .catch(error => console.error(error));
     },
     async fetchCheckerStatuses({ commit, state }, { checkStatusQueryURL, prNumber }) {
-      // console.log(checkStatusQueryURL + `?access_token=${Config.githubConfig.apiAccessToken}`);
+    //  console.log(checkStatusQueryURL + `?access_token=${Config.githubConfig.apiAccessToken}`);
       fetch(checkStatusQueryURL + `?access_token=${state.config.githubConfig.apiAccessToken}`)
         .then(response => response.json())
         .then(jsonData => {
-          // console.log("fetchCheckerStatuses", jsonData);
+          console.log("fetchCheckerStatuses", prNumber, jsonData);
           commit("PROCESS_CHECKER_STATUS", { jsonData, prNumber });
         })
         .catch(error => console.error(error));

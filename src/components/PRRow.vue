@@ -1,7 +1,7 @@
 <template>
   <tr
     class="pr-row"
-    :class="{'has-enough-approvers' : didPRGetRequiredApproves, 'dont-have-enough-approvers': !didPRGetRequiredApproves}"
+    :class="{'has-enough-approvers' : isReadyToBeMerged, 'dont-have-enough-approvers': !isReadyToBeMerged}"
   >
     <td>
       <a
@@ -73,7 +73,7 @@ export default {
   computed: {
     ...mapState(["reviewersByPrID", "prList", "config"]),
     isReadyToBeMerged() {
-      return this.hasAllCheckersPassed && this.didPRGetRequiredApproves;
+      return this.hasAllCheckersPassed && this.didPRGetRequiredApproves && this.prData.mergeable;
     },
     hasAllCheckersPassed() {
       let result = true;
