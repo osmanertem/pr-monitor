@@ -98,8 +98,7 @@ export default new Vuex.Store({
       }
 
       state.config = JSON.parse(localStorage["config"]);
-
-      console.log("******11111");
+      console.log("*****");
     },
     UPDATE_CONFIG(state, { newConfig }) {
       state.config = newConfig;
