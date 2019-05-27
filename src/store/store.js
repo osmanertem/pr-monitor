@@ -27,7 +27,7 @@ export default new Vuex.Store({
       )
         .then(response => response.json())
         .then(jsonData => {
-          // console.log("fetchPRList", jsonData);
+          console.log("fetchPRList", jsonData);
           commit("PROCESS_NEW_PR_LIST", jsonData);
 
           jsonData.forEach(prData => {
@@ -69,11 +69,11 @@ export default new Vuex.Store({
         .catch(error => console.error(error));
     },
     async fetchCheckerStatuses({ commit, state }, { checkStatusQueryURL, prNumber }) {
-      // console.log(checkStatusQueryURL + `?access_token=${Config.githubConfig.apiAccessToken}`);
+      //  console.log(checkStatusQueryURL + `?access_token=${Config.githubConfig.apiAccessToken}`);
       fetch(checkStatusQueryURL + `?access_token=${state.config.githubConfig.apiAccessToken}`)
         .then(response => response.json())
         .then(jsonData => {
-          // console.log("fetchCheckerStatuses", jsonData);
+          // console.log("fetchCheckerStatuses", prNumber, jsonData);
           commit("PROCESS_CHECKER_STATUS", { jsonData, prNumber });
         })
         .catch(error => console.error(error));
@@ -85,19 +85,20 @@ export default new Vuex.Store({
       state.reviewersByPrID = {};
     },
     INIT_CONFIG(state) {
-      if (!localStorage["config"]) {
-        localStorage["config"] = JSON.stringify({
-          pageReloadInMs: 60000,
-          githubConfig: {
-            username: "osmanertem",
-            apiAccessToken: "",
-            owner: "vuexp",
-            repo: "vuexp"
-          }
-        });
+      const defaultConfig = JSON.stringify({
+        pageReloadInMs: 60000,
+        githubConfig: {
+          username: "osmanertem",
+          apiAccessToken: "",
+          owner: "vuexp",
+          repo: "vuexp"
+        }
+      });
+      if (typeof(localStorage) !== "undefined" && localStorage["config"]) {
+        state.config = JSON.parse(localStorage["config"]);
+      } else {
+        state.config = defaultConfig;
       }
-
-      state.config = JSON.parse(localStorage["config"]);
     },
     UPDATE_CONFIG(state, { newConfig }) {
       state.config = newConfig;
@@ -129,6 +130,7 @@ export default new Vuex.Store({
       for (let i = 0; i < state.prList.length; i++) {
         if (state.prList[i].number == jsonData.number) {
           Vue.set(state.prList[i], "mergeable", jsonData.mergeable);
+          Vue.set(state.prList[i], "mergeable_state", jsonData.mergeable_state);
           break;
         }
       }
@@ -146,11 +148,17 @@ export default new Vuex.Store({
       //state.prList = jsonData;
     },
     PROCESS_NEW_PR_LIST(state, jsonData) {
+      if (jsonData.length !== state.prList.length) {
+        state.prList = jsonData;
+        return;
+      }
+
       for (let i = 0; i < jsonData.length; i++) {
         let found = false;
         for (let j = 0; j < state.prList.length; j++) {
           if (jsonData[i].number == state.prList[j].number) {
             jsonData[i].mergeable = state.prList[j].mergeable;
+            jsonData[i].mergeable_state = state.prList[j].mergeable_state;
             jsonData[i].checkerStatuses = state.prList[j].checkerStatuses;
             Vue.set(state.prList, j, jsonData[i]);
             found = true;
@@ -162,8 +170,6 @@ export default new Vuex.Store({
           Vue.set(state.prList, state.prList.length, jsonData[i]);
         }
       }
-
-      //  state.prList = jsonData;
     },
     increment(state) {
       state.count++;

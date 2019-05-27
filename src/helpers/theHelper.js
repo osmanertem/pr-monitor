@@ -3,7 +3,7 @@ const USERS = [
   { login: "ahmetceylan", name: "Ahmet Ceylan", role: "SW" },
   { login: "AlicanBayir", name: "Alican", role: "SW" },
   { login: "alpaykuru", name: "Alpay", role: "SW" },
-  { login: "aylino", name: "Aylin", role: "QA" },
+  { login: "aylino", name: "Gökçe", role: "QA" },
   { login: "brendtumi", name: "Tümay", role: "SW" },
   { login: "efegure", name: "Efe", role: "SW" },
   { login: "ercang", name: "Ercan", role: "SW" },
@@ -28,7 +28,7 @@ const USERS = [
   { login: "zhunor", name: "Orhun", role: "SW" }
 ];
 
-const MIN_REQUIRED_APPROVER_COUNT = 3;
+const MIN_REQUIRED_APPROVER_COUNT = 2;
 
 export function getUserWithLogin(login) {
   for (let i = 0; i < USERS.length; i++) {
@@ -41,7 +41,7 @@ export function getUserWithLogin(login) {
 }
 
 export function didPRGetRequiredApproveCount(approverList) {
-  return approverList.length >= MIN_REQUIRED_APPROVER_COUNT;
+  return approverList.length >= MIN_REQUIRED_APPROVER_COUNT ;
 
   // return (
   //   approverList.filter(currentApprover => {

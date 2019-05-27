@@ -3,23 +3,30 @@
     <table class="the-table" border="1">
       <thead>
         <th>#</th>
+        <th>
+          QA
+          <br>SW
+        </th>
         <th title="Ready to be merged. All checkers succeeded and has enough approvers">Ready</th>
         <th>Owner</th>
-        <th>QA<br>SW</th>
         <th>Title</th>
         <th>Approvers</th>
         <th>Checkers</th>
-        <th>
-          Mergeable
-          <br>(No conflicts)
-        </th>
+        <th>Mergeable</th>
         <th>
           Has Enough
           <br>Approvers
         </th>
       </thead>
       <tbody>
-        <PRRow v-for="(prData, index) in filteredPrList" :prData="prData" :index="index" :key="index" :hideQA="hideQA" :hideSW="hideSW"/>
+        <PRRow
+          v-for="(prData, index) in filteredPrList"
+          :prData="prData"
+          :index="index"
+          :key="index"
+          :hideQA="hideQA"
+          :hideSW="hideSW"
+        />
       </tbody>
     </table>
   </div>
@@ -39,12 +46,14 @@ export default {
   props: ["hideQA", "hideSW"],
   data() {
     return {
-      windowTitle: "pr-monitor",
+      windowTitle: "pr-monitor"
     };
   },
   updated() {
     this.windowTitle =
-    '(' + this.filteredPrList.length + ")" +
+      "(" +
+      this.filteredPrList.length +
+      ")" +
       (this.isThereAnyReadyPR ? "Ⓜ️" : "") +
       (this.isMyReviewNeeded ? "❗️ " : "") +
       "pr-monitor";
@@ -65,10 +74,11 @@ export default {
     filteredPrList() {
       return this.prList.filter(prData => {
         let currentUser = getUserWithLogin(prData.user.login);
-        return !(currentUser.role === "SW" && this.hideSW) && !(currentUser.role === "QA" && this.hideQA);
-      })
-
-      return [];
+        return (
+          !(currentUser.role === "SW" && this.hideSW) &&
+          !(currentUser.role === "QA" && this.hideQA)
+        );
+      });
     },
     isMyReviewNeeded() {
       let result = false;
@@ -85,7 +95,9 @@ export default {
       this.filteredPrList.forEach(prData => {
         if (
           this.hasAllCheckersPassed(prData) &&
-          this.didPRGetRequiredApproves(prData)
+          this.didPRGetRequiredApproves(prData) &&
+          prData.mergeable &&
+          prData.mergeable_state === 'clean'
         ) {
           result = true;
         }
