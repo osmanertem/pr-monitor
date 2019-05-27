@@ -20,6 +20,9 @@
       <span class="config-param-title">access_token: </span>
       <input type="text" :value="config.githubConfig.apiAccessToken" @change="onAccessTokenChanged" style="width:300px">
     </p>
+    <p>
+      <a href="https://github.com/osmanertem/pr-monitor#requirements" >How to get access token? </a>
+    </p>
   </div>
 </template>
 
