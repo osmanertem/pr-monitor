@@ -9,15 +9,15 @@
     </p>
     <MonitorTable id="monitor-table" :hideQA="hideQA" :hideSW="hideSW" />
     <p>
-      <span>Hide QA: </span>
+      <span class="config-param-title">Hide QA: </span>
       <input type="checkbox" v-model="hideQA">
-      <span>Hide SW: </span>
+      <span class="config-param-title">Hide SW: </span>
       <input type="checkbox" v-model="hideSW">
-      <span style="margin-left:30px">username: </span>
+      <span class="config-param-title">username: </span>
       <input type="text" :value="config.githubConfig.username" @change="onGithubUsernameChange">
-      <span>page reload in ms:</span>
-      <input type="text" :value="config.pageReloadInMs" @change="onPageReloadChanged" style="width:50px"> 
-      <span>access_token: </span>
+      <span class="config-param-title">page reload in sec: </span>
+      <input type="text" :value="parseInt(config.pageReloadInMs/1000)" @change="onPageReloadChanged" style="width:50px"> 
+      <span class="config-param-title">access_token: </span>
       <input type="text" :value="config.githubConfig.apiAccessToken" @change="onAccessTokenChanged" style="width:300px">
     </p>
   </div>
@@ -75,7 +75,7 @@ export default {
     },
     onPageReloadChanged(e) {
       let copyConfig = JSON.parse(localStorage["config"]);
-      copyConfig.pageReloadInMs = parseInt(e.srcElement.value);
+      copyConfig.pageReloadInMs = parseInt(e.srcElement.value) * 1000;
       localStorage["config"] = JSON.stringify(copyConfig);
       location.reload();
     }
@@ -93,6 +93,10 @@ export default {
 </script>
 
 <style>
+.config-param-title {
+  margin-left:10px;
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -105,5 +109,20 @@ export default {
 #monitor-table {
   margin-left: auto;
   margin-right: auto;
+}
+.content {
+  max-width: unset !important;
+  padding:unset !important;
+}
+
+table {
+  border-width: 0px;
+  display:unset;
+}
+th td {
+  border: 1px none #dfe2e5 !important;
+}
+tr {
+  border: 1px none #dfe2e5 !important;
 }
 </style>
