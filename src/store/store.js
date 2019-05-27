@@ -85,20 +85,19 @@ export default new Vuex.Store({
       state.reviewersByPrID = {};
     },
     INIT_CONFIG(state) {
-      const defaultConfig = JSON.stringify({
-        pageReloadInMs: 60000,
-        githubConfig: {
-          username: "osmanertem",
-          apiAccessToken: "",
-          owner: "vuexp",
-          repo: "vuexp"
-        }
-      });
-      if (typeof(localStorage) !== "undefined" && localStorage["config"]) {
-        state.config = JSON.parse(localStorage["config"]);
-      } else {
-        state.config = defaultConfig;
+      if (!localStorage["config"]) {
+        localStorage["config"] = JSON.stringify({
+          pageReloadInMs: 60000,
+          githubConfig: {
+            username: "osmanertem",
+            apiAccessToken: "",
+            owner: "vuexp",
+            repo: "vuexp"
+          }
+        });
       }
+
+      state.config = JSON.parse(localStorage["config"]);
     },
     UPDATE_CONFIG(state, { newConfig }) {
       state.config = newConfig;
