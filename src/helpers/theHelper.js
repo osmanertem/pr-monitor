@@ -25,7 +25,8 @@ const USERS = [
   { login: "wwdd1", name: "Mehmet", role: "SW" },
   { login: "yasinvural", name: "Yasin", role: "SW" },
   { login: "yerol", name: "Yiğit", role: "SW" },
-  { login: "zhunor", name: "Orhun", role: "SW" }
+  { login: "zhunor", name: "Orhun", role: "SW" },
+  { login: "hcatana", name: "Hakan Çatana", role: "QA" }
 ];
 
 const MIN_REQUIRED_APPROVER_COUNT = 2;
